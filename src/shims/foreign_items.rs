@@ -345,14 +345,7 @@ pub trait EvalContextExt<'mir, 'tcx: 'mir>: crate::MiriInterpCxExt<'mir, 'tcx> {
         };
 
         match allocator_kind {
-            AllocatorKind::Global => {
-                let (body, instance) = this
-                    .lookup_exported_symbol(symbol)?
-                    .expect("symbol should be present if there is a global allocator");
-
-                Ok(EmulateByNameResult::MirBody(body, instance))
-            }
-            AllocatorKind::Default => {
+            _ => {
                 default(this)?;
                 Ok(EmulateByNameResult::NeedsJumping)
             }
